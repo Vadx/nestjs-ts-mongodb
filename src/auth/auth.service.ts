@@ -1,4 +1,8 @@
-import { Injectable, UnauthorizedException, ConflictException } from '@nestjs/common';
+import {
+  Injectable,
+  UnauthorizedException,
+  ConflictException,
+} from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UsersService } from '../users/users.service';
 import { RegisterDto } from './dto/register.dto';
@@ -18,12 +22,12 @@ export class AuthService {
     }
 
     const user = await this.usersService.create(registerDto);
-    const payload = { email: user.email, sub: user._id };
-    
+    const payload = { email: user.email, sub: user._id.toString() };
+
     return {
       access_token: this.jwtService.sign(payload),
       user: {
-        id: user._id,
+        id: user._id.toString(),
         email: user.email,
         firstName: user.firstName,
         lastName: user.lastName,
@@ -46,12 +50,12 @@ export class AuthService {
       throw new UnauthorizedException('Invalid credentials');
     }
 
-    const payload = { email: user.email, sub: user._id };
-    
+    const payload = { email: user.email, sub: user._id.toString() };
+
     return {
       access_token: this.jwtService.sign(payload),
       user: {
-        id: user._id,
+        id: user._id.toString(),
         email: user.email,
         firstName: user.firstName,
         lastName: user.lastName,

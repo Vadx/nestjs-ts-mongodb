@@ -6,6 +6,7 @@
 [circleci-url]: https://circleci.com/gh/nestjs/nest
 
 ## Project Structure
+
 ```
 src/
 ├── app.module.ts
@@ -47,10 +48,12 @@ src/
 ## API Endpoints
 
 ### Authentication
+
 - `POST /auth/register` - Register a new user
 - `POST /auth/login` - Login user
 
 ### Tasks (Protected routes)
+
 - `GET /tasks` - Get all tasks for authenticated user
 - `GET /tasks/stats` - Get task statistics
 - `GET /tasks/:id` - Get specific task
@@ -61,11 +64,13 @@ src/
 ## Installation and Setup
 
 1. Install dependencies:
+
 ```bash
 npm install
 ```
 
 2. Set up environment variables:
+
 ```bash
 cp .env.example .env
 # Edit .env with your MongoDB connection string and JWT secret
@@ -74,6 +79,7 @@ cp .env.example .env
 3. Start MongoDB locally or use MongoDB Atlas
 
 4. Run the application:
+
 ```bash
 # Development
 npm run start:dev
@@ -98,3 +104,130 @@ npm run start:prod
 - **Security**: Password hashing, JWT tokens, route protection
 
 This is a production-ready NestJS application with proper project structure, error handling, validation, and security features.
+
+## API Endpoints & Examples
+
+### Authentication Endpoints
+
+#### Register a New User
+
+**POST** `/auth/register`
+
+**Request:**
+
+```json
+{
+  "email": "john.doe@example.com",
+  "password": "securePassword123",
+  "firstName": "John",
+  "lastName": "Doe"
+}
+```
+
+**Response (201):**
+
+```json
+{
+  "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "user": {
+    "id": "64a7b8c9d1e2f3a4b5c6d7e8",
+    "email": "john.doe@example.com",
+    "firstName": "John",
+    "lastName": "Doe"
+  }
+}
+```
+
+**Error Response (409 - Conflict):**
+
+```json
+{
+  "statusCode": 409,
+  "timestamp": "2024-01-15T10:30:00.000Z",
+  "path": "/auth/register",
+  "method": "POST",
+  "message": "User with this email already exists"
+}
+```
+
+#### Login User
+
+**POST** `/auth/login`
+
+**Request:**
+
+```json
+{
+  "email": "john.doe@example.com",
+  "password": "securePassword123"
+}
+```
+
+**Response (200):**
+
+```json
+{
+  "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "user": {
+    "id": "64a7b8c9d1e2f3a4b5c6d7e8",
+    "email": "john.doe@example.com",
+    "firstName": "John",
+    "lastName": "Doe"
+  }
+}
+```
+
+**Error Response (401 - Unauthorized):**
+
+```json
+{
+  "statusCode": 401,
+  "timestamp": "2024-01-15T10:30:00.000Z",
+  "path": "/auth/login",
+  "method": "POST",
+  "message": "Invalid credentials"
+}
+```
+
+---
+
+### Task Management Endpoints (Protected Routes)
+
+**Note:** All task endpoints require Bearer token in Authorization header:
+
+```
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+```
+
+#### Create a New Task
+
+**POST** `/tasks`
+
+**Request:**
+
+```json
+{
+  "title": "Complete project documentation",
+  "description": "Write comprehensive documentation for the NestJS project",
+  "status": "TODO",
+  "priority": "HIGH",
+  "dueDate": "2024-01-20T18:00:00.000Z"
+}
+```
+
+**Response (201):**
+
+```json
+{
+  "_id": "64a7b8c9d1e2f3a4b5c6d7e9",
+  "title": "Complete project documentation",
+  "description": "Write comprehensive documentation for the NestJS project",
+  "status": "TODO",
+  "priority": "HIGH",
+  "dueDate": "2024-01-20T18:00:00.000Z",
+  "userId": "64a7b8c9d1e2f3a4b5c6d7e8",
+  "isCompleted": false,
+  "createdAt": "2024-01-15T10:30:00.000Z",
+  "updatedAt": "2024-01-15T10:30:00.000Z"
+}
+```

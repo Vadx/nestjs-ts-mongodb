@@ -1,4 +1,10 @@
-import { IsString, IsOptional, IsEnum, IsDateString, IsBoolean } from 'class-validator';
+import {
+  IsString,
+  IsOptional,
+  IsEnum,
+  IsDateString,
+  IsBoolean,
+} from 'class-validator';
 import { TaskStatus, TaskPriority } from '../schemas/task.schema';
 
 export class UpdateTaskDto {
